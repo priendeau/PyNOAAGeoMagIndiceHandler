@@ -11,7 +11,7 @@ setup(
     version=__version__,
     description="A python interface to Space NOAA Magnetometer, Solar Wind Electron Proton, Differential Flux and Anisotropy Index from ACE and Stereo A, B satellite.",
     license="BSD NEW LICENCE",
-    url="http://github.com/priendeau/PyNOAAGeoMagIndiceHandler" % ( __version__ ),
+    url="http://github.com/priendeau/PyNOAAGeoMagIndiceHandler" ,
     long_description=u"""A python interface to Space NOAA 
 ====================================
     A python interface to Space NOAA Magnetometer, Solar Wind Electron Proton, Differential Flux and 
