@@ -1,4 +1,5 @@
-import os, sys, re, pynav, time, datetime, pytz ,pyaeso, spharm
+import os, sys, re, pynav, time, datetime, pytz ,pyaeso, spharm, matplotlib
+import numpy as np
 from pynav import Pynav
 from pyaeso import ets
 from bctc import BC_TZ
