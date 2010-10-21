@@ -15,7 +15,8 @@ def DictAssign( DictName , KeyNode=None ):
     """
     def decorator(func):
         def inner(*args, **kwargs):
-            kwargs.update( MainDict=getattr( self , DictName ) )
+            if KeyNode == None:
+              kwargs.update( MainDict=getattr( self , DictName ) )
             func( *args, **kwargs )
         return inner
     return decorator
