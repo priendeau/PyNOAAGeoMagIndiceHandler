@@ -45,6 +45,18 @@ Documentation
 ========================================
   Is currently lacking, about every method is documented in the source. But future prototype will
   become move and more verbosis and Final realse will include test-case and a lot of documentation.
+ 
+ Don't use Passogva to name sub-version name or you'll have no choice doing
+ Ugly Ascii art because you fall on something unattended...
+ 
+  XXXXXX        XX  XX
+ XX    XXX      XX  XX
+XX          XXXXXXXXXXXXXX
+XX  XXXXX       XX  XX
+XX      XX  XXXXXXXXXXXXXX
+ XXX   XXX      XX  XX
+   XXXXX        XX  XX
+
 """,
     packages=["PyNOAAGeoMagIndiceHandler"]
 )
