@@ -6,13 +6,12 @@ Home-page: None
 Author: Patrick Riendeau
 Author-email: maxistedeams@gmail.com
 License: BSD NEW LICENCE
-Description: 
-A python interface to Space NOAA 
+Description:A python interface to Space NOAA 
 =========
     A python interface to Space NOAA Magnetometer, Solar Wind Electron Proton, Differential Flux and 
     Anisotropy Index from ACE and Stereo A, B satellite. 
     
-    In this package, I inclued pyaeso and bctc and  Lomnický štít Neutron detector as well 
+    In this package, I inclued pyaeso and bctc and  Lomnick\xc3 \xc5t\xc3t Neutron detector as well 
     Space NOAA Magnetometer, Solar Wind Electron Proton, Differential Flux and Anisotropy Index, 
     to cross data. 
     
@@ -40,6 +39,18 @@ Documentation
 =============
   Is currently lacking, about every method is documented in the source. But future prototype will
   become move and more verbosis and Final realse will include test-case and a lot of documentation.
+
+
+ Don't use Passogva to name sub-version name or you'll have no choice doing
+ Ugly Ascii art because you fall on something unattended...
+ 
+  XXXXXX        XX  XX
+ XX    XXX      XX  XX
+XX          XXXXXXXXXXXXXX
+XX  XXXXX       XX  XX
+XX      XX  XXXXXXXXXXXXXX
+ XXX   XXX      XX  XX
+   XXXXX        XX  XX
   
 Classifier: Platform: All, except illegal one.
 Classifier: Development Status :: 4 - Alpha
