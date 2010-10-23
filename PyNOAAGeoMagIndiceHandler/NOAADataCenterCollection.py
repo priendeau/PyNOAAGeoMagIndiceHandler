@@ -152,7 +152,7 @@ class NOAADataReference( object ):
     def GetID( self ):
       return self.Name
 
-    def SetName( self, value ):
+    def SetID( self, value ):
       self.ID = value
 
     PropertyID=property( GetID, SetID )
