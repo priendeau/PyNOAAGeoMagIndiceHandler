@@ -135,5 +135,5 @@ class NOAADataReference( object ):
       setattr( self.Data, ItemKey, Kargs[ItemKey] )
 
 if __name__.__eq__( '__main__' ):
-  OnjNOAATest=NOAADataReference() 
+  ObjNOAATest=NOAADataReference() 
 

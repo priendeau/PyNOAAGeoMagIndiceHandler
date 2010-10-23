@@ -15,6 +15,40 @@ class GeoMagReferences( object ):
     FieldReference={  }
     SatelliteName=None
     LapsInterleave=None
+    DictReference={
+      'field':{
+        'name':'dict',
+        'value':[ 'RealTimeSolarIndiceReference' ],
+        'dict':{
+          'name':'position',
+          'value':[ 'system' ],
+            'position':{
+              'name':'localtion',
+              'value':[ 'earth','sonde','satellite' ], },
+            'localtion':{
+              'name':'site',
+              'value':[ 'sk-ta3','ace','stereo-a','stereo-b' ]  },
+              'site':{
+                'name':'detector',
+                'value':['neutronmonitor','swepam','magnetometer'],
+                'detector':{
+                  'name':['stringfield','listfield','collectionfield'],
+                  'value':[ 'title','field','laps','url','1m','5m','1h','12h','24h','1w','1m','1y','2y' ],
+                  'stringfield':{
+                    'name':'str',
+                    'value':[ 'title', 'url'] },
+                  'listfield':{
+                    'name':'list',
+                    'value':['field'] },
+                  'collectionfield':{
+                    'name':'dict',
+                    'value':['laps','1m','5m','1h','12h','24h','1w','1m','1y','2y'] }
+                  }
+                }
+              }
+            }
+          }
+    
     RealTimeSolarIndiceReference={
       'system':{
           'earth':{
@@ -38,7 +72,7 @@ class GeoMagReferences( object ):
                   }
                  }
             },
-            'stereo':{
+            'stereo-a':{
               'name':{
                 'a':{
                   'field':[ 'UT Date YR', 'UT Date MO', 'UT Date DA', 'UT Date HHMM', 'Modified Julian Day','Seconds of the Day','S','BR','BT','BN','Bt','Lat.','Long.' ], 
@@ -48,8 +82,12 @@ class GeoMagReferences( object ):
                         'url':"http://www.swpc.noaa.gov/ftpdir/lists/stereo/sta_mag_1m.txt" }
                       }
                     }
-                  },
-                'b':{
+                  }
+                }
+              },
+            'stereo-b':{
+              'name':{
+                'a':{
                   'field':[ 'UT Date YR', 'UT Date MO', 'UT Date DA', 'UT Date HHMM', 'Modified Julian Day','Seconds of the Day','S','BR','BT','BN','Bt','Lat.','Long.' ], 
                   'magnetometer':{
                     'laps':{
