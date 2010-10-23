@@ -1,10 +1,18 @@
-import os, sys, re, pynav, time, datetime, pytz ,pyaeso, spharm
+from __future__ import with_statement
+
+import os, sys, re, pynav, time, datetime, pytz ,pyaeso, spharm, matplotlib,xml_marshaller, xmlbuilder
+from xml_marshaller import xml_marshaller 
+from xml_marshaller.xml_marshaller import *
+from xmlbuilder import XMLBuilder
+
+import numpy as np
 from pynav import Pynav
 from pyaeso import ets
 from bctc import BC_TZ
 from bctc.load import yield_load_points
 
 from PyNOAAGeoMagIndiceHandler import decorator
+from decorator import DictAssign
 
 class GeoMagReferences( object ):
   NodeUpdate=None
@@ -13,6 +21,40 @@ class GeoMagReferences( object ):
     FieldReference={  }
     SatelliteName=None
     LapsInterleave=None
+    DictReference={
+      'field':{
+        'name':'dict',
+        'value':[ 'RealTimeSolarIndiceReference' ],
+        'dict':{
+          'name':'position',
+          'value':[ 'system' ],
+            'position':{
+              'name':'localtion',
+              'value':[ 'earth','sonde','satellite' ], },
+            'localtion':{
+              'name':'site',
+              'value':[ 'sk-ta3','ace','stereo-a','stereo-b' ]  },
+              'site':{
+                'name':'detector',
+                'value':['neutronmonitor','swepam','magnetometer'],
+                'detector':{
+                  'name':['stringfield','listfield','collectionfield'],
+                  'value':[ 'title','field','laps','url','1m','5m','1h','12h','24h','1w','1m','1y','2y' ],
+                  'stringfield':{
+                    'name':'str',
+                    'value':[ 'title', 'url'] },
+                  'listfield':{
+                    'name':'list',
+                    'value':['field'] },
+                  'collectionfield':{
+                    'name':'dict',
+                    'value':['laps','1m','5m','1h','12h','24h','1w','1m','1y','2y'] }
+                  }
+                }
+              }
+            }
+          }
+    
     RealTimeSolarIndiceReference={
       'system':{
           'earth':{
@@ -36,7 +78,7 @@ class GeoMagReferences( object ):
                   }
                  }
             },
-            'stereo':{
+            'stereo-a':{
               'name':{
                 'a':{
                   'field':[ 'UT Date YR', 'UT Date MO', 'UT Date DA', 'UT Date HHMM', 'Modified Julian Day','Seconds of the Day','S','BR','BT','BN','Bt','Lat.','Long.' ], 
@@ -46,8 +88,12 @@ class GeoMagReferences( object ):
                         'url':"http://www.swpc.noaa.gov/ftpdir/lists/stereo/sta_mag_1m.txt" }
                       }
                     }
-                  },
-                'b':{
+                  }
+                }
+              },
+            'stereo-b':{
+              'name':{
+                'a':{
                   'field':[ 'UT Date YR', 'UT Date MO', 'UT Date DA', 'UT Date HHMM', 'Modified Julian Day','Seconds of the Day','S','BR','BT','BN','Bt','Lat.','Long.' ], 
                   'magnetometer':{
                     'laps':{
@@ -62,22 +108,13 @@ class GeoMagReferences( object ):
           }
       }
 
-    DictName=None
-    DictContent=None
-    def GetDictName( self ):
-      return self.DictContent
-
-    def SetDictName( self, value ):
-      self.DictName = value
-      self.DictContent=getattr( self , self.DictName )
-
-    PropertyDictName=property( GetDictName, SetDictName )
-    
+   
     RootName=None
     RootNameContent=None
+    @DictAssign( 'RealTimeSolarIndiceReference' )
     def GetRoot( self ):
       return self.RootName, self.RootNameContent
-
+    @DictAssign( 'RealTimeSolarIndiceReference' )
     def SetRoot( self, value ):
       DictRef=self.PropertyDictName
       self.RootName = value
@@ -87,9 +124,12 @@ class GeoMagReferences( object ):
     
     CollectionType=None
     CollectionTypeContent=None
+
+    @DictAssign( 'RealTimeSolarIndiceReference' )
     def GetCollectionType( self ):
       return self.CollectionType, self.CollectionTypeContent
 
+    @DictAssign( 'RealTimeSolarIndiceReference' )
     def SetCollectionType( self, value ):
       self.CollectionType = value
       self.CollectionTypeContent=self.RealTimeSolarIndiceReference[self.RootName][self.CollectionType]
@@ -98,9 +138,12 @@ class GeoMagReferences( object ):
 
     CollectionName=None
     CollectionNameContent=None
+
+    @DictAssign( 'RealTimeSolarIndiceReference' )
     def GetCollectionName( self ):
       return self.CollectionName, CollectionNameContent
 
+    @DictAssign( 'RealTimeSolarIndiceReference' )
     def SetCollectionName( self, value ):
       self.CollectionName = value
       self.CollectionNameContent=self.RealTimeSolarIndiceReference[self.RootName][self.CollectionType][self.CollectionName]
@@ -109,9 +152,11 @@ class GeoMagReferences( object ):
 
     CollectionSection=None
     CollectionSectionContent=None
+    @DictAssign( 'RealTimeSolarIndiceReference' )
     def GetCollectionSection( self ):
       return self.CollectionSection, self.CollectionSectionContent
 
+    @DictAssign( 'RealTimeSolarIndiceReference' )
     def SetCollectionSection( self, value ):
       self.CollectionSection = value
       self.CollectionSectionContent = self.RealTimeSolarIndiceReference[self.RootName][self.CollectionType][self.CollectionName][self.CollectionSection]
@@ -120,9 +165,12 @@ class GeoMagReferences( object ):
 
     InstrumentName=None
     InstrumentNameContent=None
+
+    @DictAssign( 'RealTimeSolarIndiceReference' )
     def GetInstrumentName( self ):
       return self.InstrumentName, self.InstrumentNameContent
 
+    @DictAssign( 'RealTimeSolarIndiceReference' )
     def SetInstrumentName( self, value ):
       self.InstrumentName = value
       self.InstrumentNameContent = self.RealTimeSolarIndiceReference[self.RootName][self.CollectionType][self.CollectionName][self.CollectionSection]
@@ -131,12 +179,14 @@ class GeoMagReferences( object ):
 
     RTSIR=None
     RTSIRContent=None
+    @DictAssign( 'RealTimeSolarIndiceReference' )
     def GetRTSIR( self ):
       return self.RTSIR
 
+    @DictAssign( 'RealTimeSolarIndiceReference' )
     def SetRTSIR( self, value ):
       self.PropertyRoot, self.PropertyCollectionType, self.PropertyCollectionName, self.PropertyCollectionSection = value
-      self.RTSIR = self.RealTimeSolarIndiceReference[self.PropertyRoot][self.PropertyCollectionType][self.PropertyCollectionName][self.PropertyCollectionSection]
+      self.RTSIR = MainDict[self.PropertyRoot][self.PropertyCollectionType][self.PropertyCollectionName][self.PropertyCollectionSection]
 
     PropertyRTSIR=property( GetRTSIR, SetRTSIR )
   ### Property By Instrument:
@@ -152,6 +202,7 @@ class GeoMagReferences( object ):
     PropertyFieldName=property( GetFieldName, SetFieldName )
 
     LapsValue=None
+
     def GetLapsValue( self ):
       return self.RTSIR['laps'][self.LapsValue]
 
@@ -162,6 +213,7 @@ class GeoMagReferences( object ):
 
     UrlName=None
     UrlContent=None
+
     def GetUrlName( self ):
       return self.UrlContent
 

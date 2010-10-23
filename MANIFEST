@@ -1,5 +1,6 @@
 README
 setup.py
 PyNOAAGeoMagIndiceHandler/GeoMagReferences.py
+PyNOAAGeoMagIndiceHandler/NOAADataCenterCollection.py
 PyNOAAGeoMagIndiceHandler/__init__.py
 PyNOAAGeoMagIndiceHandler/decorator.py

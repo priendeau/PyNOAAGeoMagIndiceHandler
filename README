@@ -3,7 +3,7 @@ A python interface to Space NOAA
     A python interface to Space NOAA Magnetometer, Solar Wind Electron Proton, Differential Flux and 
     Anisotropy Index from ACE and Stereo A, B satellite. 
     
-    In this package, I inclued pyaeso and bctc and  Lomnick\xc3 \xc5t\xc3t Neutron detector as well 
+    In this package, I inclued pyaeso and bctc and  Lomnicky stit Neutron detector as well 
     Space NOAA Magnetometer, Solar Wind Electron Proton, Differential Flux and Anisotropy Index, 
     to cross data. 
     

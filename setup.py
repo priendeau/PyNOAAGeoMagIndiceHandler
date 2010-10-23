@@ -1,6 +1,7 @@
 from distutils.core import setup
 from PyNOAAGeoMagIndiceHandler import __version__
 from PyNOAAGeoMagIndiceHandler import GeoMagReferences
+from PyNOAAGeoMagIndiceHandler import NOAADataCenterCollection
 from PyNOAAGeoMagIndiceHandler import decorator
 from ez_setup import use_setuptools 
 
@@ -12,12 +13,12 @@ setup(
     description="A python interface to Space NOAA Magnetometer, Solar Wind Electron Proton, Differential Flux and Anisotropy Index from ACE and Stereo A, B satellite.",
     license="BSD NEW LICENCE",
     url="git://github.com/priendeau/PyNOAAGeoMagIndiceHandler.git" ,
-    long_description=u"""A python interface to Space NOAA 
+    long_description="""A python interface to Space NOAA 
 ====================================
     A python interface to Space NOAA Magnetometer, Solar Wind Electron Proton, Differential Flux and 
     Anisotropy Index from ACE and Stereo A, B satellite. 
     
-    In this package, I inclued pyaeso and bctc and Lomnick\xc3 \xc5t\xc3t Neutron detector as well 
+    In this package, I inclued pyaeso and bctc and Lomnicky stit Neutron detector as well 
     Space NOAA Magnetometer, Solar Wind Electron Proton, Differential Flux and Anisotropy Index, 
     to cross data. 
     
@@ -34,7 +35,7 @@ Installing
 =====================================
   It is using distutils(setup.py), so you can easily install this on most system with no trouble.
   From the base dir:
-  python setup.py install (you would need root access depending on the system being used(`sudo'))
+  python setup.py install (you would need root access depending on the system being used('sudo'))
   
   You can download the latest versions released from <<No pypi for the moment, crude develpt and 
   in correct stuff will cause problem and rejection, but maxistedeams will release it >>

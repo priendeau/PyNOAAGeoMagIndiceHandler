@@ -124,8 +124,56 @@ class NOAADataReference( object ):
                 '1h':{
                   'url':'ftp://ftp.cmdl.noaa.gov/ozwv/surfo3/arrival_heights/ahclsoz' } } } } } } }
 
+  NodeImpl=NOAADataReferenceImpl()
+  
   class NOAADataReferenceFactory( object ):
-    Data=NOAADataReference.NOAADataReferenceImpl
+
+    DictReference={ 'name':None, 'value':[] }
+    DictFactory={}
+    CurrentID=0
+    
+    NewAllocName=None
+    NewAllocValue=None
+    NewAllocContent=None
+    def GetNewAlloc( self ):
+      return self.NewAllocContent
+
+    def SetNewAlloc( self, value ):
+      self.NewAllocName, self.NewAllocContent = value
+      self.CurrentID+=1
+      self.NewDict={ self.CurrentID:dict( self.DictReference ) }
+      self.NewDict[self.CurrentID]['name']=self.NewAllocName
+      self.NewDict[self.CurrentID]['value']=self.NewAllocContent
+      self.DictFactory.update( self.NewDict )
+
+    PropertyNewAlloc=property( GetNewAlloc, SetNewAlloc )
+
+    ID=None
+    def GetID( self ):
+      return self.Name
+
+    def SetName( self, value ):
+      self.ID = value
+
+    PropertyID=property( GetID, SetID )
+    
+    Name=None
+    def GetName( self ):
+      return self.Name
+
+    def SetName( self, value ):
+      self.Name = value
+
+    PropertyName=property( GetName, SetName )
+    
+    Value=None
+    def GetValue( self ):
+      return self.Value
+
+    def SetValue( self, value ):
+      self.Value = value
+
+    PropertyValue=property( GetValue, SetValue )
 
   def __init__( self , **Kargs ):
     for ItemKey in Kargs.keys():
