@@ -1,4 +1,10 @@
-import os, sys, re, pynav, time, datetime, pytz ,pyaeso, spharm, matplotlib
+from __future__ import with_statement
+
+import os, sys, re, pynav, time, datetime, pytz ,pyaeso, spharm, matplotlib,xml_marshaller, xmlbuilder
+from xml_marshaller import xml_marshaller 
+from xml_marshaller.xml_marshaller import *
+from xmlbuilder import XMLBuilder
+
 import numpy as np
 from pynav import Pynav
 from pyaeso import ets

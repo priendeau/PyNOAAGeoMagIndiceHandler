@@ -3,11 +3,8 @@ from __future__ import with_statement
 import os, sys, re, pynav, time, datetime, pytz ,pyaeso, spharm, matplotlib, xml_marshaller, xmlbuilder
 import numpy as np
 from pynav import Pynav
-from pyaeso import ets
-from bctc import BC_TZ
-from bctc.load import yield_load_points
-from xml_marshaller import xml_marshaller as XmlMarshaller
-from XmlMarshaller import *
+from xml_marshaller import xml_marshaller 
+from xml_marshaller.xml_marshaller import *
 from xmlbuilder import XMLBuilder
 from PyNOAAGeoMagIndiceHandler import decorator
 from decorator import DictAssign
