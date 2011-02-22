@@ -51,7 +51,7 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
       r'(?ui)hmi4096' ]  }
 
   BaseModuleLoad={
-    'list':[ '__pylab__','__urllib_pynav__','__Image__','__mathplotlib__','__UrlPayload__', '__Filter_Image_Url__' ] ,
+    'list':[ '__pylab__','__urllib_pynav__','__Image__','__mathplotlib__','__UrlPayload__', '__Filter_Image_Url__', '__Download_Image_Url__' ] ,
     '__pylab__'        :{
       'SystemExit':"Pylab is essential to this example." } ,
     '__urllib_pynav__' :{
@@ -65,7 +65,9 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
     '__UrlPayload__':{ 'SystemExit':"No PyNav Module-Attr available." },
     '__Filter_Image_Url__':{
       'SystemExit':{ 'noattr':'No Attr Provided within actual work-stream' ,
-                     'main':"No Images provided with actual work-stream." } }
+                     'main':"No Images provided with actual work-stream." } } ,
+    '__Download_Image_Url__':{ 'SystemExit':{ 'noattr':'No Attr Provided within actual work-stream' ,
+                                              'main'  :'No Downloading Images was provided with actual work-stream.' } }
     }
 
   ImagePattern={ 'level':{ 1:[ ], 2:[ ], 3:[ ] } }
@@ -190,10 +192,25 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
         self.ImagePattern['level'][IntMatchCount].append( ImageName )
     else:
       raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit']['noattr'] )
-    
-      
 
-    
+  @DecoratorWxWeather.SetFuncName( )
+  def __Download_Image_Url__( self ):
+    if hasattr( self, 'ImageRegList' ):
+      for ImageName in getattr( self, 'ImageRegList' ):
+        IntMatchCount=0
+        for RegExpRule in self.UrlPath['file-filter'] :
+          CurrReg=re.compile( RegExpRule )
+          if CurrReg.search( ImageName ) :
+            IntMatchCount+=1
+
+        if IntMatchCount not in self.ImagePattern['level'].keys():
+          self.ImagePattern['level'][IntMatchCount]=list()
+          
+        self.ImagePattern['level'][IntMatchCount].append( ImageName )
+    else:
+      raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit']['noattr'] )
+      
+  
   @DecoratorWxWeather.InitStructStart( )
   def __init__( self ):
     for ItemModule in self.BaseModuleLoad['list']:
