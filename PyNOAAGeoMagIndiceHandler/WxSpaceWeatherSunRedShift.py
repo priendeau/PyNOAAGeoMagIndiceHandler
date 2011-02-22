@@ -26,22 +26,39 @@ class DecoratorWxWeather:
 
 
   
-class WxWeatherPyLadModuleLoader( object ):
+class WxWeatherPyLabModuleLoaderFactory( object ):
+
+  UrlPath={
+    'url':"http://www.spaceweather.com/",
+    'file-filter':[
+      r'(?ui)images[0-9]{4}',
+      r'(?ui)/+[0-9]{2}[a-z]{3}[0-9]{2}/+' ,
+      r'(?ui)hmi4096' ]  }
 
   BaseModuleLoad={
-    '__Modpylab__'        :{
+    'list':[ '__pylab__','__urllib_pynav__','__Image__','__mathplotlib__','__UrlPayload__', '__Filter_Image_Url__' ] ,
+    '__pylab__'        :{
       'SystemExit':"Pylab is essential to this example." } ,
-    '__Modurllib_pynav__' :{
+    '__urllib_pynav__' :{
       'SystemExit':"This example need Network support with following module( urllib, urllib2, Pynav ).",
       'ModuleVar':{
         'Pynav':'PyNavUrlLoader' } } ,
-    '__ModImage__'        :{
+    '__Image__'        :{
       'SystemExit':"PIL must be installed to run this example." } ,
-    '__Modmathplotlib__'  :{
-      'SystemExit':"matplotlib.cbook must be installed to run this example." }
+    '__mathplotlib__'  :{
+      'SystemExit':"matplotlib.cbook must be installed to run this example." } ,
+    '__UrlPayload__':{ 'SystemExit':"No PyNav Module-Attr available." },
+    '__Filter_Image_Url__':{
+      'SystemExit':{ 'noattr':'No Attr Provided within actual work-stream' ,
+                     'main':"No Images provided with actual work-stream." } }
     }
+
+  ImagePattern={ 'level':{ '1':[ ], '2':[ ], '3':[ ] } }
+
+  # Dedication Content Handler 
   CurrVarName     = None
-  
+
+  # Dedicated to Content association 
   CurrModule      = None
   CurModuleName   = None
   CurSectionName  = None
@@ -59,14 +76,12 @@ class WxWeatherPyLadModuleLoader( object ):
   def SetSectionName( self, value  ):
     self.CurSectionName = value
   
-  
   def GetModuleName( self ):
     return self.CurModuleName
 
   def SetModuleName( self, value  ):
     self.CurModuleName = value
 
-  
   def GetVarName( self ):
     return self.CurrVarName
 
@@ -101,7 +116,7 @@ class WxWeatherPyLadModuleLoader( object ):
   RootValue = property( GetRootValue, SetRootVar  )
 
   @DecoratorWxWeather.SetFuncName( )
-  def __Modpylab__( self ):
+  def __pylab__( self ):
     try:
       __builtins__.__import__( 'pylab', {}, {} ,[], -1 ) 
       
@@ -110,7 +125,7 @@ class WxWeatherPyLadModuleLoader( object ):
         raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit'] )
 
   @DecoratorWxWeather.SetFuncName( )
-  def __Modurllib_pynav__( self ):
+  def __urllib_pynav__( self ):
     try:
       import urllib, urllib2, pynav
       from pynav import Pynav
@@ -120,7 +135,7 @@ class WxWeatherPyLadModuleLoader( object ):
         raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit'] )
 
   @DecoratorWxWeather.SetFuncName( )
-  def __ModImage__( self ):
+  def __Image__( self ):
     try:
       #import Image
       __builtins__.__import__( 'Image', {}, {} , [], -1 ) 
@@ -128,51 +143,76 @@ class WxWeatherPyLadModuleLoader( object ):
         raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit'] )
 
   @DecoratorWxWeather.SetFuncName( )
-  def __Modmathplotlib__( self ):
+  def __mathplotlib__( self ):
     try:
       #import matplotlib.cbook as cbook
       __builtins__.__import__( 'matplotlib.cbook', {}, {} , ['cbook'], -1 ) 
     except ImportError, exc:
       raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit'] )
-     
+
+  @DecoratorWxWeather.SetFuncName( )
+  def __UrlPayload__( self ):
+    if hasattr( self ,'PyNavUrlLoader' ):
+      self.ImageUrl = getattr( getattr( self, 'PyNavUrlLoader' ), 'go' )( self.UrlPath['url'] )
+      self.ImageRegList=getattr( getattr( self, 'PyNavUrlLoader' ), 'get_all_links' )( )
+      self.ImageRegListFilter=list()
+    else:
+      raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit'] )
+
+  @DecoratorWxWeather.SetFuncName( )
+  def __Filter_Image_Url__( self ):
+    if hasattr( self, 'ImageRegList' ):
+
+    else:
+      raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit']['noattr'] )
+    
+      for ImageName in getattr( self, 'ImageRegList' ):
+        CurrStreamOut='Testing Images : %s ' % ( ImageName )
+        IntMatchCount=0
+        for RegExpRule in UrlPath['file-filter'] :
+          #print "\tBuilding RegExp : %s" % ( RegExpRule )
+          CurrReg=re.compile( RegExpRule )
+          if CurrReg.search( ImageName ) :
+            IntMatchCount+=1
+        CurrStreamOut+='\t %d matches' % IntMatchCount
+        if IntMatchCount > 0 and IntMatchCount < len( UrlPath['file-filter'] )-1 :
+            sys.stdout.write( "%s\n" % CurrStreamOut )
+        if IntMatchCount >= len( UrlPath['file-filter'] )-1 and IntMatchCount < len( UrlPath['file-filter'] ) :
+            sys.stdout.write( "Candidate( %s )\n" % CurrStreamOut )
+        if IntMatchCount == len( UrlPath['file-filter'] ) :
+          sys.stdout.write( "Success( %s )\n" % CurrStreamOut )
+    
 
   def __init__( self ):
-    for ItemModule in self.BaseModuleLoad:
+    for ItemModule in self.BaseModuleLoad['list']:
       print "Calling %s from Load." % ( ItemModule )
       getattr( self, ItemModule )( )
  
 
-AWxModluleLoad=WxWeatherPyLadModuleLoader() 
+AWxModluleLoad=WxWeatherPyLabModuleLoaderFactory() 
 
 
 # http://www.spaceweather.com/
 # http://www.spaceweather.com/images2011/18feb11/
 
-UrlPath={ 'url':"http://www.spaceweather.com/",
-          'file-filter':[ r'(?ui)images[0-9]{4}',
-                          r'(?ui)/+[0-9]{2}[a-z]{3}[0-9]{2}/+' ,
-                          r'(?ui)hmi4096' ]  }
 
-if hasattr( AWxModluleLoad ,'PyNavUrlLoader' ):
-  ImageUrl = AWxModluleLoad.PyNavUrlLoader.go( UrlPath['url'] )
-  ImageRegList=AWxModluleLoad.PyNavUrlLoader.get_all_links( )
-  ImageRegListFilter=list()
 
-for ImageName in ImageRegList:
-  CurrStreamOut='Testing Images : %s ' % ( ImageName )
-  IntMatchCount=0
-  for RegExpRule in UrlPath['file-filter'] :
-    #print "\tBuilding RegExp : %s" % ( RegExpRule )
-    CurrReg=re.compile( RegExpRule )
-    if CurrReg.search( ImageName ) :
-      IntMatchCount+=1
-  CurrStreamOut+='\t %d matches' % IntMatchCount
-  if IntMatchCount > 0 and IntMatchCount < len( UrlPath['file-filter'] )-1 :
-      sys.stdout.write( "%s\n" % CurrStreamOut )
-  if IntMatchCount >= len( UrlPath['file-filter'] )-1 and IntMatchCount < len( UrlPath['file-filter'] ) :
-      sys.stdout.write( "Candidate( %s )\n" % CurrStreamOut )
-  if IntMatchCount == len( UrlPath['file-filter'] ) :
-    sys.stdout.write( "Success( %s )\n" % CurrStreamOut )
+
+##for ImageName in ImageRegList:
+##  CurrStreamOut='Testing Images : %s ' % ( ImageName )
+##  IntMatchCount=0
+##  for RegExpRule in UrlPath['file-filter'] :
+##    #print "\tBuilding RegExp : %s" % ( RegExpRule )
+##    CurrReg=re.compile( RegExpRule )
+##    if CurrReg.search( ImageName ) :
+##      IntMatchCount+=1
+##  CurrStreamOut+='\t %d matches' % IntMatchCount
+##  if IntMatchCount > 0 and IntMatchCount < len( UrlPath['file-filter'] )-1 :
+##      sys.stdout.write( "%s\n" % CurrStreamOut )
+##  if IntMatchCount >= len( UrlPath['file-filter'] )-1 and IntMatchCount < len( UrlPath['file-filter'] ) :
+##      sys.stdout.write( "Candidate( %s )\n" % CurrStreamOut )
+##  if IntMatchCount == len( UrlPath['file-filter'] ) :
+##    sys.stdout.write( "Success( %s )\n" % CurrStreamOut )
 
 """
 ###
