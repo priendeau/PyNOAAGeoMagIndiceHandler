@@ -190,6 +190,14 @@ for ImageName in ImageRegList:
   mass... Involving magnetic fluctuation and electric fluctuation of human to draw a Geomagnetic Index to
   understand more the effect of Mass Proton deflection on human behavioring.
 
+
+  This Work-land is also a demonstration of couple of tools and decorator, property , behavior used to approach fair
+  and accepted developpment...
+
+  Developped during spare time and during couples calls, @IBM, KellyServices for BNC Bank help center ( ... and what lying aroud to
+  fairly analyse impact of 4th Generation of language and it's impact... )
+
+  
   
 
 """   
