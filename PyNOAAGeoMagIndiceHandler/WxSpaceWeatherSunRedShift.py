@@ -9,6 +9,21 @@ class DecoratorWxWeather:
   FuncName = None 
 
   @classmethod
+  def InitStructStart( cls ):
+    
+    """
+    This Decorator Will:
+    - Create a variable funcName being assigned automatically to funcName the FunctionName
+
+    The marshaller computes a key from function arguments
+    """
+    def decorator(func):
+        def inner(*args, **kwargs):
+          print "From Class %s, Instantiation of %s" % ( cls.__name__ , func.__name__ )
+          func( *args, **kwargs )
+        return inner
+    return decorator
+  @classmethod
   def SetFuncName( cls ):
     
     """
@@ -53,7 +68,7 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
                      'main':"No Images provided with actual work-stream." } }
     }
 
-  ImagePattern={ 'level':{ '1':[ ], '2':[ ], '3':[ ] } }
+  ImagePattern={ 'level':{ 1:[ ], 2:[ ], 3:[ ] } }
 
   # Dedication Content Handler 
   CurrVarName     = None
@@ -115,12 +130,12 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
   ### FrameWork
   RootValue = property( GetRootValue, SetRootVar  )
 
+
+  ### Stream Member 
   @DecoratorWxWeather.SetFuncName( )
   def __pylab__( self ):
     try:
       __builtins__.__import__( 'pylab', {}, {} ,[], -1 ) 
-      
-      #from pylab import *
     except ImportError, exc:
         raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit'] )
 
@@ -162,27 +177,24 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
   @DecoratorWxWeather.SetFuncName( )
   def __Filter_Image_Url__( self ):
     if hasattr( self, 'ImageRegList' ):
-
-    else:
-      raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit']['noattr'] )
-    
       for ImageName in getattr( self, 'ImageRegList' ):
-        CurrStreamOut='Testing Images : %s ' % ( ImageName )
         IntMatchCount=0
-        for RegExpRule in UrlPath['file-filter'] :
-          #print "\tBuilding RegExp : %s" % ( RegExpRule )
+        for RegExpRule in self.UrlPath['file-filter'] :
           CurrReg=re.compile( RegExpRule )
           if CurrReg.search( ImageName ) :
             IntMatchCount+=1
-        CurrStreamOut+='\t %d matches' % IntMatchCount
-        if IntMatchCount > 0 and IntMatchCount < len( UrlPath['file-filter'] )-1 :
-            sys.stdout.write( "%s\n" % CurrStreamOut )
-        if IntMatchCount >= len( UrlPath['file-filter'] )-1 and IntMatchCount < len( UrlPath['file-filter'] ) :
-            sys.stdout.write( "Candidate( %s )\n" % CurrStreamOut )
-        if IntMatchCount == len( UrlPath['file-filter'] ) :
-          sys.stdout.write( "Success( %s )\n" % CurrStreamOut )
-    
 
+        if IntMatchCount not in self.ImagePattern['level'].keys():
+          self.ImagePattern['level'][IntMatchCount]=list()
+          
+        self.ImagePattern['level'][IntMatchCount].append( ImageName )
+    else:
+      raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit']['noattr'] )
+    
+      
+
+    
+  @DecoratorWxWeather.InitStructStart( )
   def __init__( self ):
     for ItemModule in self.BaseModuleLoad['list']:
       print "Calling %s from Load." % ( ItemModule )
