@@ -142,6 +142,7 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
   ImageList=[ ]
   DecorTransfertKeyStep=[ { 'modulelist':{ 'method-transfert':'append' } } ]
   IntDecorKeyId = 0
+  CurrentFuncParsed = None 
   
   # Dedication Content Handler 
   CurrVarName     = None
@@ -301,16 +302,19 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
   def __DecorTransfertDict__( self, ClassTransfert ):
     StrPageDictTransfert=self.DecorTransfertKeyStep[self.IntDecorKeyId]
     StrSectionTransferAttr=self.DecorTransfertKeyStep[self.IntDecorKeyId][StrPageDictTransfert]['method-transfert']
-    for ItemName in self.BaseModuleLoad.keys():
-      if StrPageDictTransfert in self.BaseModuleLoad[ItemName].keys():
-        getattr( getattr( ClassTransfert, ModuleList ), StrSectionTransferAttr )( { ItemName:self.BaseModuleLoad[ItemName][modulelist] } )
+    #for ItemName in self.BaseModuleLoad.keys():
+    ItemNameDict = self.BaseModuleLoad[self.CurrentFuncParsed]
+      if StrPageDictTransfert in self.BaseModuleLoad[self.CurrentFuncParsed].keys():
+        getattr( getattr( ClassTransfert, ModuleList ), StrSectionTransferAttr )( { ItemName:self.BaseModuleLoad[self.CurrentFuncParsed][modulelist] } )
     
   
   @DecoratorWxWeather.InitStructStart( IsProcessModuleList=True )
   def __init__( self ):
     for ItemModule in self.BaseModuleLoad['list']:
+      self.CurrentFuncParsed = ItemModule
+      self.__DecorTransfertDict__( DecoratorWxWeather )
       print "Calling %s from Load." % ( ItemModule )
-      getattr( self, ItemModule )( )
+      getattr( self, ItemModule )(  )
  
 
 AWxModluleLoad=WxWeatherPyLabModuleLoaderFactory() 
