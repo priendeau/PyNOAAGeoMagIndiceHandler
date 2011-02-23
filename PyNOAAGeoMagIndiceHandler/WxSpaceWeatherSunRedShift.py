@@ -9,6 +9,8 @@ class DecoratorWxWeather:
   FuncName      = None 
   StrClassName  = None
   StrFuncName   = None
+  ModuleList    = list()
+  IsProcessModuleList=False
   
   @staticmethod
   def ScanArgs( cls, **Kargs ):
@@ -26,6 +28,19 @@ class DecoratorWxWeather:
     else:
       print MsgDisplay
 
+  @classmethod
+  def ImportModule( cls ):
+    for ItemName in cls.ModuleList :
+      if type( ItemName ) == type( str() ):
+        setattr( __builtins__, ItemName, __builtins__.__import__( ItemName, {}, {} , [], -1 ) )
+      elif type( ItemName ) == type( dict() ):
+        ### need Loop
+        LastModule = None
+        for ItemKeyName in ItemName.keys():
+          if ItemKeyName != 'attr':
+            setattr( __builtins__, ItemName, __builtins__.__import__( ItemName, {}, {} , [], -1 ) )
+
+          
   @classmethod
   def InitStructStart( cls , **Kargs ):
     
@@ -47,7 +62,7 @@ class DecoratorWxWeather:
     return decorator
 
   @classmethod
-  def SetFuncName( cls ):
+  def SetFuncName( cls , **Kargs ):
     
     """
     This Decorator Will:
@@ -77,31 +92,57 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
       r'(?ui)hmi4096' ]  }
 
   BaseModuleLoad={
-    'list':[ '__pylab__','__urllib_pynav__','__Image__','__mathplotlib__','__UrlPayload__', '__Filter_Image_Url__', '__Download_Image_Url__' ] ,
+    'list':[ '__pylab__','__urllib_pynav__','__Image__','__mathplotlib__','__UrlPayload__',
+             '__Filter_Image_Url__', '__Download_Image_Url__' , '__Display_Image__' ] ,
     '__pylab__'        :{
+      'modulelist':[ 'pylab' ] ,
       'SystemExit':"Pylab is essential to this example." } ,
     '__urllib_pynav__' :{
+      'modulelist':[ 'urllib', 'urllib2',
+                     'pynav' ,
+                     { 'pynav':'Pynav', 'attr':'PyNavUrlLoader' } ] ,
       'SystemExit':"This example need Network support with following module( urllib, urllib2, Pynav ).",
       'ModuleVar':{
         'Pynav':'PyNavUrlLoader' } } ,
     '__Image__'        :{
+      'modulelist':[ 'Image' ] ,
       'SystemExit':"PIL must be installed to run this example." } ,
     '__mathplotlib__'  :{
+      'modulelist':[ { 'matplotlib':'cbook' } ] ,
       'SystemExit':"matplotlib.cbook must be installed to run this example." } ,
-    '__UrlPayload__':{ 'SystemExit':"No PyNav Module-Attr available." },
+    '__UrlPayload__':{
+      'modulelist':[] ,
+      'SystemExit':"No PyNav Module-Attr available." },
     '__Filter_Image_Url__':{
       'SystemExit':{ 'noattr':'No Attr ImageRegList Provided within actual work-stream' ,
                      'main':"No Images provided with actual work-stream." } } ,
-    '__Download_Image_Url__':{  'temp':"c:\\docume~1\\admini~1\\locals~1\\temp\\",
-                                'Section':{ 'name':'ImagePattern',
-                                            'field':'level',
-                                            'grade':3 } ,
-                                'SystemExit':{ 'noattr':'No Attr ImagePattern Provided within actual work-stream' ,
-                                              'main'  :'No Downloading Images was provided with actual work-stream.' } }
+    '__Download_Image_Url__':{
+      'modulelist':[] ,
+      'temp':"c:\\docume~1\\admini~1\\locals~1\\temp\\",
+      'Section':{
+        'name':'ImagePattern',
+        'field':'level',
+        'grade':3,
+        'type':type(dict()) } ,
+      'SystemExit':{
+        'noattr':'No Attr ImagePattern Provided within actual work-stream' ,
+        'main'  :'No Downloading Images was provided with actual work-stream.' } },
+    '__Display_Image__':{
+      'modulelist':[] ,
+      'Section':{
+        'name':'ImageList',
+        'type':type(list()) } ,
+      'SystemExit':{
+        'noattr':'No Attr ImageList Provided within actual work-stream' ,
+        'main'  :'No Images was provided to display on view-screen.' } }
     }
 
-  ImagePattern={ 'level':{ 1:[ ], 2:[ ], 3:[ ] } }
 
+  ImagePattern={ 'level':{ 1:[ ], 2:[ ], 3:[ ] } }
+  ImageList=[ ]
+  DecorTransfertKeyStep=[ { 'modulelist':{ 'method-transfert':'append' } } ]
+  IntDecorKeyId = 0
+  
   # Dedication Content Handler 
   CurrVarName     = None
 
@@ -167,16 +208,14 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
   @DecoratorWxWeather.SetFuncName( )
   def __pylab__( self ):
     try:
-      __builtins__.__import__( 'pylab', {}, {} ,[], -1 ) 
+      setattr( __builtins__, 'pylab',  __builtins__.__import__( 'pylab', {}, {} , [ '' ], -1 ) )
+      #__builtins__.__import__( 'pylab', {}, {} ,[], -1 ) 
     except ImportError, exc:
         raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit'] )
 
   @DecoratorWxWeather.SetFuncName( )
   def __urllib_pynav__( self ):
     try:
-      import urllib, urllib2, pynav
-      from pynav import Pynav
-      setattr( self, self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['ModuleVar']['Pynav'], Pynav() )
       
     except ImportError, exc:
         raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit'] )
@@ -185,7 +224,7 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
   def __Image__( self ):
     try:
       #import Image
-      __builtins__.__import__( 'Image', {}, {} , [], -1 ) 
+      setattr( __builtins__, 'Image', __builtins__.__import__( 'Image', {}, {} , [], -1 ) )
     except ImportError, exc:
         raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit'] )
 
@@ -193,7 +232,7 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
   def __mathplotlib__( self ):
     try:
       #import matplotlib.cbook as cbook
-      __builtins__.__import__( 'matplotlib.cbook', {}, {} , ['cbook'], -1 ) 
+      setattr( __builtins__, 'cbook',  __builtins__.__import__( 'matplotlib.cbook', {}, {} , ['cbook'], -1 ) )
     except ImportError, exc:
       raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit'] )
 
@@ -235,12 +274,39 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
         ListCleanFileName=ImageSample.split( '?' )
         print "Processing File : %s , downloading to path : %s" % ( ListCleanFileName[0] , StrTempPath )
         self.ImageRegList=getattr( getattr( self, 'PyNavUrlLoader' ), 'download' )( ListCleanFileName[0] , StrTempPath )
+        self.ImageList.append( ListCleanFileName[0] )
         
     else:
       raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit']['noattr'] )
-      
+
+  @DecoratorWxWeather.SetFuncName( )
+  def __Display_Image__( self ):
+    DefaultDicImage = self.BaseModuleLoad[ DecoratorWxWeather.FuncName ][ 'Section' ][ 'name' ]
+    
+    if hasattr( self, DefaultDicImage ):
+      for ItemImageFile in getattr( self, DefaultDicImage ):
+        datafile = cbook.get_sample_data( ItemImageFile )
+        dataHandler = Image.open( datafile )
+        dpi = rcParams['figure.dpi']
+        figsize = lena.size[0]/dpi, lena.size[1]/dpi
+        figure(figsize=figsize)
+        ax = axes([0,0,1,1], frameon=False)
+        ax.set_axis_off()
+        im = imshow(dataHandler, origin='lower')
+        show()
+
+    else:
+      raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit']['noattr'] )
+
+  def __DecorTransfertDict__( self, ClassTransfert ):
+    StrPageDictTransfert=self.DecorTransfertKeyStep[self.IntDecorKeyId]
+    StrSectionTransferAttr=self.DecorTransfertKeyStep[self.IntDecorKeyId][StrPageDictTransfert]['method-transfert']
+    for ItemName in self.BaseModuleLoad.keys():
+      if StrPageDictTransfert in self.BaseModuleLoad[ItemName].keys():
+        getattr( getattr( ClassTransfert, ModuleList ), StrSectionTransferAttr )( { ItemName:self.BaseModuleLoad[ItemName][modulelist] } )
+    
   
-  @DecoratorWxWeather.InitStructStart( )
+  @DecoratorWxWeather.InitStructStart( IsProcessModuleList=True )
   def __init__( self ):
     for ItemModule in self.BaseModuleLoad['list']:
       print "Calling %s from Load." % ( ItemModule )
