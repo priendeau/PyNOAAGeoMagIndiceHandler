@@ -6,10 +6,28 @@ TTempHandler=tempfile.NamedTemporaryFile( 'w+', -1, suffix='', prefix='img-wxspa
 
 class DecoratorWxWeather:
 
-  FuncName = None 
+  FuncName      = None 
+  StrClassName  = None
+  StrFuncName   = None
+  
+  @staticmethod
+  def ScanArgs( cls, **Kargs ):
+    for ItemKeyName,ItemKeyValue in Kargs:
+      print "Setting Item %s, value: %s" % ( ItemKeyName, ItemKeyValue )
+      setattr( cls, ItemKeyName, ItemKeyValue )
 
   @classmethod
-  def InitStructStart( cls ):
+  def PrintInstanceMsg( cls ):
+    MsgDisplay="From Class %s, Instantiation of %s" % ( cls.StrClassName , cls.StrFuncName )
+    if hasattr( cls, 'class-instance-display-msg' ):
+      IsClassShow=getattr( cls, 'class-instance-display-msg' )
+      if IsClassShow == True:
+        print MsgDisplay
+    else:
+      print MsgDisplay
+
+  @classmethod
+  def InitStructStart( cls , **Kargs ):
     
     """
     This Decorator Will:
@@ -17,12 +35,17 @@ class DecoratorWxWeather:
 
     The marshaller computes a key from function arguments
     """
-    def decorator(func):
+    
+    def decorator( func ):
         def inner(*args, **kwargs):
-          print "From Class %s, Instantiation of %s" % ( cls.__name__ , func.__name__ )
+          cls.StrClassName = cls.__name__
+          cls.StrFuncName = func.__name__
+          cls.ScanArgs( Kargs )
+          cls.PrintInstanceMsg( )
           func( *args, **kwargs )
         return inner
     return decorator
+
   @classmethod
   def SetFuncName( cls ):
     
@@ -34,7 +57,10 @@ class DecoratorWxWeather:
     """
     def decorator(func):
         def inner(*args, **kwargs):
+          cls.StrClassName = cls.__name__
+          cls.StrFuncName = func.__name__
           cls.FuncName = func.__name__
+          print "\tRegistereg FuncName : %s in class %s" % ( cls.StrFuncName , cls.StrClassName )
           func( *args, **kwargs )
         return inner
     return decorator
@@ -64,9 +90,13 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
       'SystemExit':"matplotlib.cbook must be installed to run this example." } ,
     '__UrlPayload__':{ 'SystemExit':"No PyNav Module-Attr available." },
     '__Filter_Image_Url__':{
-      'SystemExit':{ 'noattr':'No Attr Provided within actual work-stream' ,
+      'SystemExit':{ 'noattr':'No Attr ImageRegList Provided within actual work-stream' ,
                      'main':"No Images provided with actual work-stream." } } ,
-    '__Download_Image_Url__':{ 'SystemExit':{ 'noattr':'No Attr Provided within actual work-stream' ,
+    '__Download_Image_Url__':{  'temp':"c:\\docume~1\\admini~1\\locals~1\\temp\\",
+                                'Section':{ 'name':'ImagePattern',
+                                            'field':'level',
+                                            'grade':3 } ,
+                                'SystemExit':{ 'noattr':'No Attr ImagePattern Provided within actual work-stream' ,
                                               'main'  :'No Downloading Images was provided with actual work-stream.' } }
     }
 
@@ -119,18 +149,18 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
     
 
   ### Core 
-  VarName = property( GetVarName, SetVarName )
+  VarName     = property( GetVarName, SetVarName )
 
-  VarValue = property( GetVarValue, SetVarValue )
+  VarValue    = property( GetVarValue, SetVarValue )
 
-  ModuleName = property( GetModuleName, SetModuleName )
+  ModuleName  = property( GetModuleName, SetModuleName )
 
   SectionName = property( GetSectionName , SetSectionName )
 
   ItemSecName = property( GetSectionName , SetSectionName )
 
   ### FrameWork
-  RootValue = property( GetRootValue, SetRootVar  )
+  RootValue   = property( GetRootValue, SetRootVar  )
 
 
   ### Stream Member 
@@ -195,18 +225,17 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
 
   @DecoratorWxWeather.SetFuncName( )
   def __Download_Image_Url__( self ):
-    if hasattr( self, 'ImageRegList' ):
-      for ImageName in getattr( self, 'ImageRegList' ):
-        IntMatchCount=0
-        for RegExpRule in self.UrlPath['file-filter'] :
-          CurrReg=re.compile( RegExpRule )
-          if CurrReg.search( ImageName ) :
-            IntMatchCount+=1
-
-        if IntMatchCount not in self.ImagePattern['level'].keys():
-          self.ImagePattern['level'][IntMatchCount]=list()
-          
-        self.ImagePattern['level'][IntMatchCount].append( ImageName )
+    StrTempPath=self.BaseModuleLoad[ DecoratorWxWeather.FuncName ][ 'temp' ]
+    DefaultDicImage = self.BaseModuleLoad[ DecoratorWxWeather.FuncName ][ 'Section' ][ 'name' ]
+    FieldImage = self.BaseModuleLoad[ DecoratorWxWeather.FuncName ][ 'Section' ][ 'field' ]
+    IntDefaultGradeList=self.BaseModuleLoad[ DecoratorWxWeather.FuncName ][ 'Section' ][ 'grade' ]
+    if hasattr( self, DefaultDicImage ): 
+      for ImageSample in getattr( self, DefaultDicImage )[ FieldImage ][ IntDefaultGradeList ]:
+        ### Cleaning PHP SessionID and all suffixed informations from link :
+        ListCleanFileName=ImageSample.split( '?' )
+        print "Processing File : %s , downloading to path : %s" % ( ListCleanFileName[0] , StrTempPath )
+        self.ImageRegList=getattr( getattr( self, 'PyNavUrlLoader' ), 'download' )( ListCleanFileName[0] , StrTempPath )
+        
     else:
       raise SystemExit( self.BaseModuleLoad[ DecoratorWxWeather.FuncName ]['SystemExit']['noattr'] )
       
