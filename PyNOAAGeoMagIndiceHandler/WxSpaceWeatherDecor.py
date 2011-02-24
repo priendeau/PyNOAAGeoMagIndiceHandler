@@ -34,19 +34,23 @@ class DecoratorWxWeather( object ):
 
   @classmethod
   def ImportModule( cls ):
-    print "Decorator %s ModuleList:[ %s ]" % ( 'ImportModule', cls.ModuleList  )
+    print "Decorator %s ; Listed Module: %i ModuleList:[ %s ]" % ( 'ImportModule', len(cls.ModuleList) ,cls.ModuleList  )
     try:
       for ItemName in cls.ModuleList :
         if type( ItemName ) == type( str() ):
-          print "import %s" % ( ItemName )
-          setattr( __builtins__, ItemName, __builtins__.__import__( ItemName, {}, {} , [], -1 ) )
+          print "(ItemName:%s) -> import %s" % ( ItemName , ItemName )
+          #setattr( __builtins__, ItemName, None )
+          __builtins__.setattr( __builtins__, ItemName, None )
+          __builtins__.setattr( __builtins__, ItemName, getattr(__builtins__,'__import__')( ItemName, {}, {} , [], -1 ) )
+          
+          #setattr( __builtins__, ItemName , getattr(__builtins__,'__import__')( ItemName, {}, {} , [], -1 ) )
         if type( ItemName ) == type( dict() ):
           ### need Loop
           LastModule = None
           for ItemKeyName in ItemName.keys():
             if ItemKeyName != 'attr':
               print "from %s import %s" % ( ItemKeyName, ItemName[ItemKeyName] )
-              setattr( __builtins__, ItemName, __builtins__.__import__( ItemName[ItemKeyName], {}, {} , [], -1 ) )
+              setattr( __builtins__, ItemName, getattr( __builtins__ , '__import__' )( ItemName[ItemKeyName], {}, {} , [], -1 ) )
     except cls.DecoratorExceptError, exc:
         raise getattr( __builtins__, cls.DecoratorRaiseError )( DecoratorRaiseMsg )
 
