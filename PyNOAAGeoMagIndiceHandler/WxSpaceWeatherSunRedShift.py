@@ -2,101 +2,11 @@
 
 import re, os, sys, tempfile
 
+import WxSpaceWeatherDecor
+from WxSpaceWeatherDecor import DecoratorWxWeather 
+
 ### Following is not needed 
 ### TTempHandler=tempfile.NamedTemporaryFile( 'w+', -1, suffix='', prefix='img-wxspace', dir=None, delete=True )
-
-class DecoratorWxWeather( object ):
-
-  FuncName                = None 
-  StrClassName            = None
-  StrFuncName             = None
-  ModuleList              = list()
-  IsProcessModuleList     = False
-  RaiserInfo              = None
-  DecoratorExceptError    = None
-  DecoratorRaiseError     = None
-  DecoratorRaiseMsg       = None
-  DecorKargs              = None
-  
-  @classmethod
-  def ScanArgs( cls ):
-    print "Decorator %s, KeyList:[ %s ]" % ( 'ScanArgs', cls.DecorKargs.keys()  )
-    for ItemKeyName in cls.DecorKargs.keys():
-      print "\tAdd pairValue Setting Item %s, value: %s" % ( ItemKeyName, cls.DecorKargs[ItemKeyName] )
-      setattr( cls, ItemKeyName, cls.DecorKargs[ItemKeyName] )
-
-  @classmethod
-  def PrintInstanceMsg( cls ):
-    print "Decorator %s" % ( 'PrintInstanceMsg' )
-    MsgDisplay="From Class %s, Instantiation of %s" % ( cls.StrClassName , cls.StrFuncName )
-    if hasattr( cls, 'class-instance-display-msg' ):
-      IsClassShow=getattr( cls, 'class-instance-display-msg' )
-      if IsClassShow == True:
-        print MsgDisplay
-    else:
-      print MsgDisplay
-
-  @classmethod
-  def ImportModule( cls ):
-    print "Decorator %s ModuleList:[ %s ]" % ( 'ImportModule', cls.ModuleList  )
-    try:
-      for ItemName in cls.ModuleList :
-        print "Processing Module %s" % ( ItemName )
-        if type( ItemName ) == type( str() ):
-          setattr( __builtins__, ItemName, __builtins__.__import__( ItemName, {}, {} , [], -1 ) )
-        elif type( ItemName ) == type( dict() ):
-          ### need Loop
-          LastModule = None
-          for ItemKeyName in ItemName.keys():
-            if ItemKeyName != 'attr':
-              setattr( __builtins__, ItemName, __builtins__.__import__( ItemName, {}, {} , [], -1 ) )
-    except cls.DecoratorExceptError, exc:
-        raise getattr( __builtins__, cls.DecoratorRaiseError )( DecoratorRaiseMsg )
-
-          
-  @classmethod
-  def InitStructStart( cls , **Kargs ):
-    cls.DecorKargs=Kargs 
-    """
-    This Decorator Will:
-    - Create a variable funcName being assigned automatically to funcName the FunctionName
-
-    The marshaller computes a key from function arguments
-    """
-    cls.ScanArgs( )
-    def decorator( func ):
-      def inner(*args, **kwargs):
-        cls.StrClassName = cls.__name__
-        cls.StrFuncName = func.__name__
-        cls.PrintInstanceMsg( )
-        if hasattr( cls, 'IsProcessModuleList' ):
-          if cls.IsProcessModuleList == True:
-            cls.ImportModule() 
-        func( *args, **kwargs )
-      return inner
-    return decorator
-
-  @classmethod
-  def SetFuncName( cls , **Kargs ):
-    
-    """
-    This Decorator Will:
-    - Create a variable funcName being assigned automatically to funcName the FunctionName
-
-    The marshaller computes a key from function arguments
-    """
-    def decorator(func):
-        def inner(*args, **kwargs):
-          cls.StrClassName = cls.__name__
-          cls.StrFuncName = func.__name__
-          cls.FuncName = func.__name__
-          print "\tRegistered FuncName : %s in class %s" % ( cls.StrFuncName , cls.StrClassName )
-          if cls.IsProcessModuleList == True:
-            cls.ImportModule()
-          cls.ModuleList=list()
-          func( *args, **kwargs )
-        return inner
-    return decorator
 
 
   
@@ -228,12 +138,9 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
   def __pylab__( self ):
     print "end of function"
 
-
   @DecoratorWxWeather.SetFuncName( )
   def __urllib_pynav__( self ):
     print "end of function"
-
-        
 
   @DecoratorWxWeather.SetFuncName( )
   def __Image__( self ):
@@ -310,25 +217,29 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
     return { ItemName:getattr( self, BasedModule )[ self.CurrentFuncParsed ][ itemlist ] }
 
   def __DecorTransfertDict__( self, ClassTransfert ):
+    print "\t From __DecorTransfertDict__"
     StrPageDictTransfert=self.DecorTransfertKeyStep[self.IntDecorKeyId]
     #print "StrPageDictTransfert: %s " % ( StrPageDictTransfert )
     #print "StrSectionTransferAttr: %s " % ( self.DecorTransfertKeyStep[self.IntDecorKeyId]['modulelist']['method-transfert'] )
     #['method-transfert'] )
-    StrSectionTransferAttr=self.DecorTransfertKeyStep[self.IntDecorKeyId]['modulelist']['method-transfert']
+    #StrSectionTransferAttr=self.DecorTransfertKeyStep[self.IntDecorKeyId]['modulelist']['method-transfert']
     #for ItemName in self.BaseModuleLoad.keys():
-    ItemNameDict = self.BaseModuleLoad[self.CurrentFuncParsed]
-    if StrPageDictTransfert in self.BaseModuleLoad[self.CurrentFuncParsed].keys():
-      NewStrucTransfert=self.__StrutcTransfert__( ItemName , self.BaseModuleLoad, modulelist )
-      print "\t\tContent of StrucTransfert: %s " % ( NewStrucTransfert ) 
-      getattr( getattr( ClassTransfert, ModuleList ), StrSectionTransferAttr )(  )
+    #ItemNameDict = self.BaseModuleLoad[self.CurrentFuncParsed]
+    if 'modulelist' in self.BaseModuleLoad[self.CurrentFuncParsed].keys():
+      print "\t\tImporting Module List : %s" % ( self.BaseModuleLoad[ self.CurrentFuncParsed ][ 'modulelist' ] )
+    else:
+      print "No Module List inside func : %s " % ( self.CurrentFuncParsed )
+      #NewStrucTransfert=self.__StrutcTransfert__( ItemName , self.BaseModuleLoad, modulelist )
+      #print "\t\tContent of StrucTransfert: %s " % ( NewStrucTransfert ) 
+      #getattr( getattr( ClassTransfert, ModuleList ), StrSectionTransferAttr )(  )
     
   
   @DecoratorWxWeather.InitStructStart( IsProcessModuleList=True )
   def __init__( self ):
     for ItemModule in self.BaseModuleLoad['list']:
       self.CurrentFuncParsed = ItemModule
-      self.__DecorTransfertDict__( DecoratorWxWeather )
       print "Calling %s from Load." % ( ItemModule )
+      self.__DecorTransfertDict__( DecoratorWxWeather )
       DecoratorWxWeather.DecoratorExceptError=ImportError
       DecoratorWxWeather.DecoratorRaiseError='SystemExit'
       DecoratorWxWeather.DecoratorRaiseMsg = self.BaseModuleLoad[ ItemModule ]['SystemExit']
