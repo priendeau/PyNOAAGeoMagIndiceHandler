@@ -51,7 +51,7 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
         'name':'ImagePattern',
         'field':'level',
         'grade':3,
-        'type':type(dict()) } ,
+        'type':type( dict() ) } ,
       'SystemExit':{
         'noattr':'No Attr ImagePattern Provided within actual work-stream' ,
         'main'  :'No Downloading Images was provided with actual work-stream.' } },
@@ -59,7 +59,7 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
       'modulelist':[] ,
       'Section':{
         'name':'ImageList',
-        'type':type(list()) } ,
+        'type':type( list() ) } ,
       'SystemExit':{
         'noattr':'No Attr ImageList Provided within actual work-stream' ,
         'main'  :'No Images was provided to display on view-screen.' } }
@@ -119,15 +119,15 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
     
 
   ### Core 
-  VarName     = property( GetVarName, SetVarName )
+  VarName     = property( GetVarName,       SetVarName      )  
 
-  VarValue    = property( GetVarValue, SetVarValue )
+  VarValue    = property( GetVarValue,      SetVarValue     )
 
-  ModuleName  = property( GetModuleName, SetModuleName )
+  ModuleName  = property( GetModuleName,    SetModuleName   )
 
-  SectionName = property( GetSectionName , SetSectionName )
+  SectionName = property( GetSectionName,   SetSectionName  )
 
-  ItemSecName = property( GetSectionName , SetSectionName )
+  ItemSecName = property( GetSectionName,   SetSectionName  )
 
   ### FrameWork
   RootValue   = property( GetRootValue, SetRootVar  )
@@ -216,22 +216,6 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
   def __StrutcTransfert__( self , ItemName, BasedModule , itemlist):
     return { ItemName:getattr( self, BasedModule )[ self.CurrentFuncParsed ][ itemlist ] }
 
-  def __DecorTransfertDict__( self, ClassTransfert ):
-    print "\t From __DecorTransfertDict__"
-    StrPageDictTransfert=self.DecorTransfertKeyStep[self.IntDecorKeyId]
-    #print "StrPageDictTransfert: %s " % ( StrPageDictTransfert )
-    #print "StrSectionTransferAttr: %s " % ( self.DecorTransfertKeyStep[self.IntDecorKeyId]['modulelist']['method-transfert'] )
-    #['method-transfert'] )
-    #StrSectionTransferAttr=self.DecorTransfertKeyStep[self.IntDecorKeyId]['modulelist']['method-transfert']
-    #for ItemName in self.BaseModuleLoad.keys():
-    #ItemNameDict = self.BaseModuleLoad[self.CurrentFuncParsed]
-    if 'modulelist' in self.BaseModuleLoad[self.CurrentFuncParsed].keys():
-      print "\t\tImporting Module List : %s" % ( self.BaseModuleLoad[ self.CurrentFuncParsed ][ 'modulelist' ] )
-    else:
-      print "No Module List inside func : %s " % ( self.CurrentFuncParsed )
-      #NewStrucTransfert=self.__StrutcTransfert__( ItemName , self.BaseModuleLoad, modulelist )
-      #print "\t\tContent of StrucTransfert: %s " % ( NewStrucTransfert ) 
-      #getattr( getattr( ClassTransfert, ModuleList ), StrSectionTransferAttr )(  )
     
   
   @DecoratorWxWeather.InitStructStart( IsProcessModuleList=True )
@@ -239,10 +223,10 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
     for ItemModule in self.BaseModuleLoad['list']:
       self.CurrentFuncParsed = ItemModule
       print "Calling %s from Load." % ( ItemModule )
-      self.__DecorTransfertDict__( DecoratorWxWeather )
       DecoratorWxWeather.DecoratorExceptError=ImportError
       DecoratorWxWeather.DecoratorRaiseError='SystemExit'
       DecoratorWxWeather.DecoratorRaiseMsg = self.BaseModuleLoad[ ItemModule ]['SystemExit']
+      DecoratorWxWeather.ModuleList=self.BaseModuleLoad[ self.CurrentFuncParsed ][ 'modulelist' ]
       getattr( self, ItemModule )(  )
  
 
@@ -251,9 +235,6 @@ AWxModluleLoad=WxWeatherPyLabModuleLoaderFactory( )
 
 # http://www.spaceweather.com/
 # http://www.spaceweather.com/images2011/18feb11/
-
-
-
 
 ##for ImageName in ImageRegList:
 ##  CurrStreamOut='Testing Images : %s ' % ( ImageName )
