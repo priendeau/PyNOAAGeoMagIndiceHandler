@@ -39,11 +39,7 @@ class DecoratorWxWeather( object ):
       for ItemName in cls.ModuleList :
         if type( ItemName ) == type( str() ):
           print "(ItemName:%s) -> import %s" % ( ItemName , ItemName )
-          #setattr( __builtins__, ItemName, None )
-          __builtins__.setattr( __builtins__, ItemName, None )
-          __builtins__.setattr( __builtins__, ItemName, getattr(__builtins__,'__import__')( ItemName, {}, {} , [], -1 ) )
-          
-          #setattr( __builtins__, ItemName , getattr(__builtins__,'__import__')( ItemName, {}, {} , [], -1 ) )
+          __import__( ItemName, globals={}, locals={}, fromlist=[], level=-1 ) 
         if type( ItemName ) == type( dict() ):
           ### need Loop
           LastModule = None
