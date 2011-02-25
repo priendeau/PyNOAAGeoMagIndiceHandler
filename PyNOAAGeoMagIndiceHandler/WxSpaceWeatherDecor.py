@@ -4,7 +4,7 @@ import re, os, sys, importlib
 """
   DecoratorWxWeather,
     embedded Import-Module Mechanism with Error-catching. 
-  Copyright(C) 2010, Maxiste Deams, Rheault Etccy, Patrick Riendeau
+  Copyright(C) 2010, Maxiste Deams, Rheault Etccy, Patrick Riendeau ( priendea@ca.ibm.com )
   Also 'distributible' under New-Bsd License for developpement purposes
 
 
