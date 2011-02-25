@@ -224,7 +224,7 @@ class WxWeatherPyLabModuleLoaderFactory( object ):
       self.CurrentFuncParsed = ItemModule
       print "Calling %s from Load." % ( ItemModule )
       DecoratorWxWeather.DecoratorExceptError=ImportError
-      DecoratorWxWeather.DecoratorRaiseError='SystemExit'
+      DecoratorWxWeather.DecoratorRaiseError=SystemExit
       DecoratorWxWeather.DecoratorRaiseMsg = self.BaseModuleLoad[ ItemModule ]['SystemExit']
       DecoratorWxWeather.ModuleList=self.BaseModuleLoad[ self.CurrentFuncParsed ][ 'modulelist' ]
       getattr( self, ItemModule )(  )
