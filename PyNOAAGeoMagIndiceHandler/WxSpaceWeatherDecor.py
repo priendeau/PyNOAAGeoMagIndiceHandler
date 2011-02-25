@@ -40,17 +40,16 @@ class DecoratorWxWeather( object ):
         if type( ItemName ) == type( str() ):
           print "(ItemName:%s) -> import %s" % ( ItemName , ItemName )
           #__import__( ItemName, globals={}, locals={}, fromlist=[], level=0 )
-          importlib.import_module( ItemName, package=None )
+          getattr( importlib, 'import_module')( ItemName, package=None )
         if type( ItemName ) == type( dict() ):
           ### need Loop
           LastModule = None
           for ItemKeyName in ItemName.keys():
             if ItemKeyName != 'attr':
               print "from %s import %s" % ( ItemKeyName, ItemName[ItemKeyName] )
-              importlib.import_module( "%s.%s" %(  ItemName, ItemName[ItemKeyName] ) )
-
+              getattr( importlib, 'import_module')( "%s.%s" %(  ItemName, ItemName[ItemKeyName] ) )
     except cls.DecoratorExceptError, exc:
-        raise getattr( __builtins__, cls.DecoratorRaiseError )( DecoratorRaiseMsg )
+        raise cls.DecoratorRaiseError( cls.DecoratorRaiseMsg )
 
           
   @classmethod
