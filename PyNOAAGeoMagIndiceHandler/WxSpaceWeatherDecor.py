@@ -47,18 +47,8 @@ class DecoratorWxWeather( object ):
           for ItemKeyName in ItemName.keys():
             if ItemKeyName != 'attr':
               print "from %s import %s" % ( ItemKeyName, ItemName[ItemKeyName] )
-              importlib.import_module( ItemName, package=ItemName[ItemKeyName] )
-              #__import__( ItemKeyName, globals={}, locals={}, fromlist=[ ItemName[ItemKeyName] ], level=-1 )
-##          AttrName=None
-##          AttrValue=None
-##          for ItemKeyName in ItemName.keys():
-##            if ItemKeyName == 'attr':
-##              AttrName=ItemName[ItemKeyName]
-##            if ItemKeyName != 'attr':
-##              AttrValue=ItemName[ItemKeyName]
-##              print "from %s import %s as %s" % ( ItemKeyName, ItemName[ItemKeyName] )
-##          getattr( __builtins__, , importlib.import_module( ItemName, package=ItemName[ItemKeyName] )
-              #__import__( ItemKeyName, globals={}, locals={}, fromlist=[ ItemName[ItemKeyName] ], level=-1 )
+              importlib.import_module( "%s.%s" %(  ItemName, ItemName[ItemKeyName] ) )
+
     except cls.DecoratorExceptError, exc:
         raise getattr( __builtins__, cls.DecoratorRaiseError )( DecoratorRaiseMsg )
 
