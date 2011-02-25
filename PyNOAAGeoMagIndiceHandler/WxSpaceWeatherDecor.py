@@ -1,6 +1,24 @@
 
 import re, os, sys, importlib 
 
+"""
+  DecoratorWxWeather,
+    embedded Import-Module Mechanism with Error-catching. 
+  Copyright(C) 2010, Maxiste Deams, Rheault Etccy, Patrick Riendeau
+  Also 'distributible' under New-Bsd License for developpement purposes
+
+
+  This following model is a structure to load Element from Decorator while informations living and are stored
+  from Based Classes, loading the __init__ with pre-decorated @DecoratorWxWeather.InitStructStart( IsProcessModuleList=True )
+  will look for a module-list of element <WHERE> Structure will be presented in a draft-topology mechanisme for concept-proof
+  brginging some tree from fore-scene to background-scene can be a good explanation from scene-1 to scene-2 memory
+  model observation in finite-instruction.
+
+  --- Under Syntaxic Correction , applied for paragrah only --- 
+
+
+"""
+
 class DecoratorWxWeather( object ):
 
   FuncName                = None 
@@ -14,6 +32,10 @@ class DecoratorWxWeather( object ):
   DecoratorRaiseMsg       = None
   DecorKargs              = None
   
+    """
+    This Part Will:
+    -  --- Explained soon ----
+    """
   @classmethod
   def ScanArgs( cls ):
     print "Decorator %s, KeyList:[ %s ]" % ( 'ScanArgs', cls.DecorKargs.keys()  )
@@ -21,6 +43,10 @@ class DecoratorWxWeather( object ):
       print "\tAdd pairValue Setting Item %s, value: %s" % ( ItemKeyName, cls.DecorKargs[ItemKeyName] )
       setattr( cls, ItemKeyName, cls.DecorKargs[ItemKeyName] )
 
+    """
+    This part Will:
+    -  --- Explained soon ----
+    """
   @classmethod
   def PrintInstanceMsg( cls ):
     print "Decorator %s" % ( 'PrintInstanceMsg' )
@@ -32,6 +58,10 @@ class DecoratorWxWeather( object ):
     else:
       print MsgDisplay
 
+    """
+    This Decorator Will:
+    -  --- Explained soon ----
+    """
   @classmethod
   def ImportModule( cls ):
     print "Decorator %s ; Listed Module: %i ModuleList:[ %s ]" % ( 'ImportModule', len(cls.ModuleList) ,cls.ModuleList  )
@@ -39,7 +69,6 @@ class DecoratorWxWeather( object ):
       for ItemName in cls.ModuleList :
         if type( ItemName ) == type( str() ):
           print "(ItemName:%s) -> import %s" % ( ItemName , ItemName )
-          #__import__( ItemName, globals={}, locals={}, fromlist=[], level=0 )
           getattr( importlib, 'import_module')( ItemName, package=None )
         if type( ItemName ) == type( dict() ):
           ### need Loop
@@ -51,16 +80,13 @@ class DecoratorWxWeather( object ):
     except cls.DecoratorExceptError, exc:
         raise cls.DecoratorRaiseError( cls.DecoratorRaiseMsg )
 
-          
-  @classmethod
-  def InitStructStart( cls , **Kargs ):
-    cls.DecorKargs=Kargs 
     """
     This Decorator Will:
-    - Create a variable funcName being assigned automatically to funcName the FunctionName
-
-    The marshaller computes a key from function arguments
+    -  --- Explained soon ----
     """
+ @classmethod
+  def InitStructStart( cls , **Kargs ):
+    cls.DecorKargs=Kargs 
     cls.ScanArgs( )
     def decorator( func ):
       def inner(*args, **kwargs):
@@ -74,15 +100,13 @@ class DecoratorWxWeather( object ):
       return inner
     return decorator
 
+    """
+    This Decorator Will:
+    -  --- Explained soon ----
+    """
   @classmethod
   def SetFuncName( cls , **Kargs ):
     
-    """
-    This Decorator Will:
-    - Create a variable funcName being assigned automatically to funcName the FunctionName
-
-    The marshaller computes a key from function arguments
-    """
     def decorator(func):
         def inner(*args, **kwargs):
           cls.StrClassName = cls.__name__
