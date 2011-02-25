@@ -1,5 +1,5 @@
 
-import re, os, sys
+import re, os, sys, importlib 
 
 class DecoratorWxWeather( object ):
 
@@ -39,14 +39,26 @@ class DecoratorWxWeather( object ):
       for ItemName in cls.ModuleList :
         if type( ItemName ) == type( str() ):
           print "(ItemName:%s) -> import %s" % ( ItemName , ItemName )
-          __import__( ItemName, globals={}, locals={}, fromlist=[], level=-1 ) 
+          #__import__( ItemName, globals={}, locals={}, fromlist=[], level=0 )
+          importlib.import_module( ItemName, package=None )
         if type( ItemName ) == type( dict() ):
           ### need Loop
           LastModule = None
           for ItemKeyName in ItemName.keys():
             if ItemKeyName != 'attr':
               print "from %s import %s" % ( ItemKeyName, ItemName[ItemKeyName] )
-              __import__( ItemKeyName, globals={}, locals={}, fromlist=[ ItemName[ItemKeyName] ], level=-1 )
+              importlib.import_module( ItemName, package=ItemName[ItemKeyName] )
+              #__import__( ItemKeyName, globals={}, locals={}, fromlist=[ ItemName[ItemKeyName] ], level=-1 )
+##          AttrName=None
+##          AttrValue=None
+##          for ItemKeyName in ItemName.keys():
+##            if ItemKeyName == 'attr':
+##              AttrName=ItemName[ItemKeyName]
+##            if ItemKeyName != 'attr':
+##              AttrValue=ItemName[ItemKeyName]
+##              print "from %s import %s as %s" % ( ItemKeyName, ItemName[ItemKeyName] )
+##          getattr( __builtins__, , importlib.import_module( ItemName, package=ItemName[ItemKeyName] )
+              #__import__( ItemKeyName, globals={}, locals={}, fromlist=[ ItemName[ItemKeyName] ], level=-1 )
     except cls.DecoratorExceptError, exc:
         raise getattr( __builtins__, cls.DecoratorRaiseError )( DecoratorRaiseMsg )
 
