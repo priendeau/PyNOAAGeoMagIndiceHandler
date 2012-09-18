@@ -4,7 +4,6 @@ import os, sys, re, pynav, time, datetime, pytz ,pyaeso, spharm, matplotlib,xml_
 
 from UnderscoreX import _XDecoratorWrapper
 
-import 
 from sqlitedict import SqliteDict
 from xml_marshaller import xml_marshaller 
 from xml_marshaller.xml_marshaller import *

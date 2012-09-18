@@ -1,17 +1,14 @@
 Metadata-Version: 1.1
 Name: PyNOAAGeoMagIndiceHandler
-Version: 0.0.1-apha-jedyais
-Author: Patrick Riendeau
+Version: 0.0.1r-apha-jedyais
+Author: Maxiste Deams, Patrick Riendeau
 Author-email: maxistedeams at gmail com
-Maintainer: maxistedeams@gmail.com
-Maintainer-email: maxistedeams at gmail com
-Home-page: http://github.com/priendeau/PyNOAAGeoMagIndiceHandler
-Download-url: http://github.com/priendeau/PyNOAAGeoMagIndiceHandler/blob/master/dist/PyNOAAGeoMagIndiceHandler-0.0.1r-apha-jedyais.tar.gz
+Maintainer: Maxiste Deams, Patrick Riendeau
+Maintainer-email: rheault etccy at gmail com
+Home-page: git://github.com/priendeau/PyNOAAGeoMagIndiceHandler.git
+Download-url: http://pypi.python.org/packages/any/P/PyNOAAGeoMagIndiceHandler/PyNOAAGeoMagIndiceHandler-0.0.1r-apha-jedyais.linux-x86_64.tar.gz
 Summary: A python interface to Space NOAA Magnetometer, Solar Wind Electron Proton, Differential Flux and Anisotropy Index from ACE and Stereo A, B satellite.
-License: BSD NEW LICENCE
-
-
-Copyright (c) 2006-2010, Patrick Riendeau
+License: Copyright (c) 2006-2010, Patrick Riendeau
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -35,117 +32,63 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-Description: A python interface to Space NOAA
-        =========
-        A python interface to Space NOAA Magnetometer, Solar Wind Electron Proton, Differential Flux and
-        Anisotropy Index from ACE and Stereo A, B satellite.
+Description: A python interface to Space NOAA 
+        ====================================
+            A python interface to Space NOAA Magnetometer, Solar Wind Electron Proton, Differential Flux and 
+            Anisotropy Index from ACE and Stereo A, B satellite. 
+            
+            In this package, I inclued pyaeso and bctc and Lomnicky stit Neutron detector as well 
+            Space NOAA Magnetometer, Solar Wind Electron Proton, Differential Flux and Anisotropy Index, 
+            to cross data. 
+            
+            This Module is a project aim to get folding indice of magnetic permeability while solar 
+            flare higher than Class M. This Solara flare are mitigating the electricity current 
+            flow during solar flare event and magnetic storm, and can be predicted by corrected 
+            humain normal energy consumption prediction and the normal proton pression existing 
+            around many region where energy can rate can be accessible with pythonic module. 
+            Region being calculated with spherical harmonic matrix. 
         
-        In this package, I inclued pyaeso and bctc and  Lomnick\xc3 \xc5t\xc3t Neutron detector as well
-        Space NOAA Magnetometer, Solar Wind Electron Proton, Differential Flux and Anisotropy Index,
-        to cross data.
-        
-        This Module is a project aim to get folding indice of magnetic permeability while solar
-        flare higher than Class M. This Solara flare are mitigating the electricity current
-        flow during solar flare event and magnetic storm, and can be predicted by corrected
-        humain normal energy consumption prediction and the normal proton pression existing
-        around many region where energy can rate can be accessible with pythonic module.
-        Region being calculated with spherical harmonic matrix.
-        
-        Can also lead to detection of future electric discontinuity during M and X Class Solar flare.
+            Can also lead to detection of future electric discontinuity during M and X Class Solar flare. 
         
         Installing
-        ==========
-        It is using distutils(setup.py), so you can easily install this on most system with no trouble.
-        From the base dir:
-        python setup.py install (you would need root access depending on the system being used(`sudo'))
-        
-        You can download the latest versions released from <<No pypi for the moment, crude develpt and
-        in correct stuff will cause problem and rejection, but maxistedeams will release it >>
-        or download the development version straight from the mercurial repository hosted by me at:
-        git://github.com/priendeau/PyNOAAGeoMagIndiceHandler.git.
+        =====================================
+          It is using distutils(setup.py), so you can easily install this on most system with no trouble.
+          From the base dir:
+          python setup.py install (you would need root access depending on the system being used('sudo'))
+          
+          You can download the latest versions released from <<No pypi for the moment, crude develpt and 
+          in correct stuff will cause problem and rejection, but maxistedeams will release it >>
+          or download the development version straight from the mercurial repository hosted by me at:
+          git://github.com/priendeau/PyNOAAGeoMagIndiceHandler.git.
         
         Documentation
-        =============
-        Is currently lacking, about every method is documented in the source. But future prototype will
-        become move and more verbosis and Final realse will include test-case and a lot of documentation.
-        
-        
-        Don't use Passogva to name sub-version name or you'll have no choice doing
-        Ugly Ascii art because you fall on something unattended...
-        
-        XXXXXX        XX  XX
-        XX    XXX      XX  XX
+        ========================================
+          Is currently lacking, about every method is documented in the source. But future prototype will
+          become move and more verbosis and Final realse will include test-case and a lot of documentation.
+         
+         Don't use Passogva to name sub-version name or you'll have no choice doing
+         Ugly Ascii art because you fall on something unattended...
+         
+          XXXXXX        XX  XX
+         XX    XXX      XX  XX
         XX          XXXXXXXXXXXXXX
         XX  XXXXX       XX  XX
         XX      XX  XXXXXXXXXXXXXX
-        XXX   XXX      XX  XX
-        XXXXX        XX  XX
-Keywords: science, proton, neuton, spheric harmony, solar flare, electrinity, nT, nano Tesla, Tesla
-Platform: Linux, AIX, Solaris, BSD, FreeBSD, Posix.
-Requires: bctc
+         XXX   XXX      XX  XX
+           XXXXX        XX  XX
+Platform: UNKNOWN
+Requires: UnderscoreX
+Requires: sqlitedict
+Requires: xmlbuilder
+Requires: xml_marshaller
+Requires: matplotlib
 Requires: spharm
+Requires: bctc
 Requires: pyaeso
 Requires: pytz
-Requires: datetime
-Requires: time
 Requires: pynav
-Requires: re
-Requires: sys
-Requires: os
-Classifier: Development Status :: 3 - Alpha
-Classifier: Environment :: Console
-Classifier: Environment :: Web Environment
-Classifier: Intended Audience :: Developers
-Classifier: Intended Audience :: Information Technology
-Classifier: Intended Audience :: Other Audience
-Classifier: Intended Audience :: Science/Research
-Classifier: Intended Audience :: System Administrators
-Classifier: Intended Audience :: Telecommunications Industry
-Classifier: License :: Free For Educational Use
-Classifier: License :: OSI Approved :: BSD License
-Classifier: License :: OSI Approved :: Python Software Foundation License
-Classifier: Natural Language :: English
-Classifier: Operating System :: POSIX
-Classifier: Operating System :: POSIX :: AIX
-Classifier: Operating System :: POSIX :: BSD
-Classifier: Operating System :: POSIX :: IRIX
-Classifier: Operating System :: POSIX :: Linux
-Classifier: Operating System :: POSIX :: Other
-Classifier: Operating System :: Unix
-Classifier: Programming Language :: C
-Classifier: Programming Language :: C++
-Classifier: Programming Language :: Cython
-Classifier: Programming Language :: Fortran
-Classifier: Programming Language :: Other
-Classifier: Programming Language :: Other Scripting Engines
-Classifier: Programming Language :: Python
-Classifier: Programming Language :: Python :: 2.6
-Classifier: Programming Language :: YACC
-Classifier: Topic :: Database
-Classifier: Topic :: Database :: Front-Ends
-Classifier: Topic :: Documentation
-Classifier: Topic :: Internet :: Log Analysis
-Classifier: Topic :: Internet :: WWW/HTTP :: Indexing/Search
-Classifier: Topic :: Multimedia
-Classifier: Topic :: Multimedia :: Graphics
-Classifier: Topic :: Multimedia :: Graphics :: 3D Modeling
-Classifier: Topic :: Multimedia :: Graphics :: Graphics Conversion
-Classifier: Topic :: Scientific/Engineering
-Classifier: Topic :: Scientific/Engineering :: Astronomy
-Classifier: Topic :: Scientific/Engineering :: Atmospheric Science
-Classifier: Topic :: Scientific/Engineering :: GIS
-Classifier: Topic :: Scientific/Engineering :: Information Analysis
-Classifier: Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator
-Classifier: Topic :: Scientific/Engineering :: Mathematics
-Classifier: Topic :: Scientific/Engineering :: Physics
-Classifier: Topic :: Scientific/Engineering :: Visualization
-Classifier: Topic :: Software Development
-Classifier: Topic :: Software Development :: Documentation
-Classifier: Topic :: Software Development :: Libraries
-Classifier: Topic :: Software Development :: Libraries :: Python Modules
-Classifier: Topic :: Software Development :: Localization
-Classifier: Topic :: Software Development :: Testing
-Classifier: Topic :: Software Development :: User Interfaces
-Classifier: Topic :: System :: Operating System
-Classifier: Topic :: Utilities
+Requires: numericalunits
+Requires: numpy
+Provides: GeoMagReferences
+
 
