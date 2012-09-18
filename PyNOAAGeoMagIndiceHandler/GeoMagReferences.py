@@ -1,6 +1,11 @@
 from __future__ import with_statement
 
-import os, sys, re, pynav, time, datetime, pytz ,pyaeso, spharm, matplotlib,xml_marshaller, xmlbuilder
+import os, sys, re, pynav, time, datetime, pytz ,pyaeso, spharm, matplotlib,xml_marshaller, xmlbuilder, sqlitedict, UnderscoreX
+
+from UnderscoreX import _XDecoratorWrapper
+
+import 
+from sqlitedict import SqliteDict
 from xml_marshaller import xml_marshaller 
 from xml_marshaller.xml_marshaller import *
 from xmlbuilder import XMLBuilder
@@ -13,6 +18,13 @@ from bctc.load import yield_load_points
 
 from PyNOAAGeoMagIndiceHandler import decorator
 from decorator import DictAssign
+
+import numericalunits as Nu
+from numericalunits import *
+
+reset_units()
+set_derived_units_and_constants()
+
 
 class GeoMagReferences( object ):
   NodeUpdate=None
